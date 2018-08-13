@@ -1,18 +1,45 @@
 'use strict';
 
-const {getHtmlInfo, getErrorData} = require('./lib/util')
+const {getHtmlJson, getErrorJson} = require('./lib/util')
 
 module.exports = app => {
 
-  process.on('uncaughtException', function (err) {
-    app.logger.error('[uncaughtException]', JSON.stringify({error: getErrorData(err)}))
-  })
+  let config = app.config.logger;
+  if (config.event.error) {
 
-  app.on('error', (err, ctx) => {
+    app.on('error', (err, ctx) => {
+      let meta = {}
+      if (ctx) {
+        meta = {
+          reqid: ctx.requestId,
+          ip: ctx.ip || '',
+          origin: ctx.origin || '',
+          host: ctx.host || '',
+          method: ctx.method || '',
+          path: ctx.path || '',
+          url: ctx.url || '',
+          body: ctx.request.body || {},
+          query: ctx.query || {},
+          params: ctx.params || {}
+        }
+      }
 
-    let meta = {}
-    if (ctx) {
-      meta = {
+      meta.error = getErrorJson(err)
+
+      app.logger.error('[error]', JSON.stringify(meta))
+    });
+  }
+
+  if (config.event.request) {
+
+    app.on('request', ctx => {
+
+      let ignore = config.ignore || [];
+      if (ignore.indexOf(ctx.path) !== -1) return;
+
+      ctx.requestId = require('uuid/v4')()
+
+      let meta = {
         reqid: ctx.requestId,
         ip: ctx.ip || '',
         origin: ctx.origin || '',
@@ -23,43 +50,18 @@ module.exports = app => {
         body: ctx.request.body || {},
         query: ctx.query || {},
         params: ctx.params || {}
-      }
-    }
+      };
 
-    meta.error = getErrorData(err)
+      app.logger.info('[request]', JSON.stringify(meta))
+    });
+  }
 
-    app.logger.error('[error]', JSON.stringify(meta))
-  });
+  if (config.event.request) {
 
-  app.on('request', ctx => {
+    app.on('response', ctx => {
 
-    let ignore = app.config.logger.ignore || [];
-    if (ignore.indexOf(ctx.path) !== -1) return;
-
-    ctx.requestId = require('uuid/v4')()
-
-    let meta = {
-      reqid: ctx.requestId,
-      ip: ctx.ip || '',
-      origin: ctx.origin || '',
-      host: ctx.host || '',
-      method: ctx.method || '',
-      path: ctx.path || '',
-      url: ctx.url || '',
-      body: ctx.request.body || {},
-      query: ctx.query || {},
-      params: ctx.params || {}
-    };
-
-    app.logger.info('[request]', JSON.stringify(meta))
-  });
-
-  app.on('response', ctx => {
-
-    let ignore = app.config.logger.ignore || [];
-    if (ignore.indexOf(ctx.path) !== -1) return;
-
-    try {
+      let ignore = config.ignore || [];
+      if (ignore.indexOf(ctx.path) !== -1) return;
 
       let meta = {
         reqid: ctx.requestId || '',
@@ -81,7 +83,7 @@ module.exports = app => {
       switch (typeof meta.response) {
         case 'string':
           if (meta.response.indexOf('DOCTYPE') !== -1) {
-            meta.response = getHtmlInfo(meta.response)
+            meta.response = getHtmlJson(meta.response)
           }
           break;
         case 'buffer':
@@ -97,9 +99,6 @@ module.exports = app => {
       else {
         app.logger.info('[response]', JSON.stringify(meta))
       }
-    }
-    catch (err) {
-      app.logger.error('[response.error]', JSON.stringify({error: getErrorData(err)}))
-    }
-  });
+    });
+  }
 };

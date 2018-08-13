@@ -1,6 +1,6 @@
 'use strict';
 
-const {getErrorData} = require('../../lib/util')
+const {getErrorJson} = require('../../lib/util')
 
 module.exports = {
 
@@ -23,7 +23,7 @@ module.exports = {
 
           if (args[i] instanceof Error) {
             args[i] = {
-              error: getErrorData(args[i])
+              error: getErrorJson(args[i])
             }
           }
 

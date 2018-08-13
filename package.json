@@ -1,9 +1,9 @@
 {
-  "name": "egg-ecarx-logger",
+  "name": "egg-json-logger",
   "version": "1.0.0",
   "description": "",
   "eggPlugin": {
-    "name": "ecarxLogger"
+    "name": "jsonLogger"
   },
   "keywords": [
     "egg",
@@ -47,12 +47,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EcarxCloudPlatform/egg-ecarx-logger.git"
+    "url": "git+https://github.com/EcarxCloudPlatform/egg-json-logger.git"
   },
   "bugs": {
-    "url": "https://github.com/EcarxCloudPlatform/egg-ecarx-logger/issues"
+    "url": "https://github.com/EcarxCloudPlatform/egg-json-logger/issues"
   },
-  "homepage": "https://github.com/EcarxCloudPlatform/egg-ecarx-logger#readme",
+  "homepage": "https://github.com/EcarxCloudPlatform/egg-json-logger#readme",
   "author": "hdumok",
   "license": "MIT"
 }

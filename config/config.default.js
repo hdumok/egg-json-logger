@@ -8,6 +8,12 @@ exports.logger = {
     path: ['/']
   },
 
+  default: {
+    request: true,
+    response: true,
+    error: true,
+  },
+
   formatter: function (meta) {
 
     let msgArray = getMessageArray(meta.message)
