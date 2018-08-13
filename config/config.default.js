@@ -2,7 +2,6 @@
 
 const {getMessageArray, getFlattenrObj} = require('../lib/util')
 
-
 exports.logger = {
 
   ignore: {

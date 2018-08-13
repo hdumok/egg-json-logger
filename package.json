@@ -38,7 +38,8 @@
   },
   "files": [
     "app.js",
-    "agent.js",
+    "app",
+    "lib",
     "config"
   ],
   "ci": {
