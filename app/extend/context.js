@@ -12,10 +12,10 @@ module.exports = {
       use: this.starttime ? Date.now() - this.starttime : 0
     };
 
-    let log = {};
+    let logger = {};
 
     ['info', 'debug', 'warn', 'error'].forEach(level => {
-      log[level] = (...args) => {
+      logger[level] = (...args) => {
         //加入meta
         args.push(meta)
 
@@ -34,6 +34,6 @@ module.exports = {
       }
     });
 
-    return log;
+    return logger;
   },
 };

@@ -1,10 +1,11 @@
 'use strict';
 
-const {getHtmlJson, getErrorJson} = require('./lib/util')
+const {getHtmlJson, getErrorJson, checkIgnorePath} = require('./lib/util')
 
 module.exports = app => {
 
-  let config = app.config.logger;
+  let config = app.config.logger || {};
+
   if (config.event.error) {
 
     app.on('error', (err, ctx) => {
@@ -34,8 +35,7 @@ module.exports = app => {
 
     app.on('request', ctx => {
 
-      let ignore = config.ignore || [];
-      if (ignore.indexOf(ctx.path) !== -1) return;
+      if (!checkIgnorePath(config.ingore)) return;
 
       ctx.requestId = require('uuid/v4')()
 
@@ -58,10 +58,9 @@ module.exports = app => {
 
   if (config.event.request) {
 
-    app.on('response', ctx => {
+    if (checkIgnorePath(config.ingore)) return;
 
-      let ignore = config.ignore || [];
-      if (ignore.indexOf(ctx.path) !== -1) return;
+    app.on('response', ctx => {
 
       let meta = {
         reqid: ctx.requestId || '',

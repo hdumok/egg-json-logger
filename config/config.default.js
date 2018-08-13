@@ -4,11 +4,9 @@ const {getMessageArray, getFlattenrObj} = require('../lib/util')
 
 exports.logger = {
 
-  ignore: {
-    path: ['/']
-  },
+  ingore: ['/', /.+\.{html|css|js}/],
 
-  default: {
+  event: {
     request: true,
     response: true,
     error: true,

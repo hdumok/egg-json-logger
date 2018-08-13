@@ -54,10 +54,9 @@ module.exports = {
 ```js
 // {app_root}/config/config.default.js
 exports.logger = {
-  ignore: {
-    // 忽略 request/reponse 日志的路由
-    path: ['/']
-  },
+
+  // 忽略 request/reponse 日志的路由, 用于过滤存活检测/静态资源等路由
+  ingore: ['/', /.+\.{html|css|js}/],
 
   event: {
     // 是否输出 request/reponse/error 事件日志
@@ -89,7 +88,7 @@ exports.logger = {
 ## Example
 ### 请求 GET http://127.0.0.1:7001/index/123?key=123
 ```
-//request log
+//request event log
 {
     level: 'INFO',
     date: '2018-08-08 16:00:43',
@@ -114,7 +113,7 @@ exports.logger = {
 ```
 
 ```
-//Controller/Service log
+//controller/service log
 this.logger.info('massage', {obj: 123}, [{arroy: 123}])
 {
     level: 'INFO',
@@ -150,9 +149,40 @@ this.logger.info('massage', {obj: 123}, [{arroy: 123}])
     use: 8
 }
 ```
+```
+//error event log
+{
+    "level": "ERROR",
+    "date": "2018-08-13 18:50:11",
+    "pid": 6629,
+    "hostname": "MokdeMacBook-Pro.local",
+    "from": "error",
+    "reqid": "a24c82dd-b58b-4652-ad70-395598e773d9",
+    "ip": "127.0.0.1",
+    "origin": "http://127.0.0.1:7001",
+    "host": "127.0.0.1:7001",
+    "method": "GET",
+    "path": "/index/123",
+    "url": "/index/123?key=123",
+    "body": {},
+    "query": {"key": "123"},
+    "params": {"abc": "123"},
+    "error": {
+      "name": "Error",
+      "message": "ReferenceError: hi is not defined",
+      "stack": "Error ReferenceError hi is not defined at getErrorJson (/Users/mok/Desktop/x-standard/node_modules/egg-json-logger/lib/util.js 33 13) at Application.app.on (/Users/mok/Desktop/x-standard/node_modules/egg-json-logger/app.js 29 20) at emitTwo (events.js 131 20) at Application.emit (events.js 214 7) at /Users/mok/Desktop/x-standard/node_modules/egg-ecarx-interface/app/middleware/interface.js 29 17 at _combinedTickCallback (internal/process/next_tick.js 131 7) at process._tickCallback (internal/process/next_tick.js 180 9)"
+    },
+    "query.key": "123",
+    "params.abc": "123",
+    "error.name": "Error",
+    "error.message": "ReferenceError: hi is not defined",
+    "error.stack": "Error ReferenceError hi is not defined at getErrorJson (/Users/mok/Desktop/x-standard/node_modules/egg-json-logger/lib/util.js 33 13) at Application.app.on (/Users/mok/Desktop/x-standard/node_modules/egg-json-logger/app.js 29 20) at emitTwo (events.js 131 20) at Application.emit (events.js 214 7) at /Users/mok/Desktop/x-standard/node_modules/egg-ecarx-interface/app/middleware/interface.js 29 17 at _combinedTickCallback (internal/process/next_tick.js 131 7) at process._tickCallback (internal/process/next_tick.js 180 9)"
+}
 
 ```
-// response log
+
+```
+// response event log
 {
     level: 'WARN',
     date: '2018-08-08 16:00:43',
