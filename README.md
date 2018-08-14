@@ -43,6 +43,8 @@ module.exports = {
 
 ### controller/service
     this.logger.info('日志的关键字', '日志的内容1', '日志的内容2'...)
+    ctx.logger.info('[controller.名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
+    ctx.logger.info('[service.名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
 ### middleware
     ctx.logger.info('[middlewave.中间件文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
 ### model/app.js
