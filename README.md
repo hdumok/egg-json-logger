@@ -58,6 +58,12 @@ exports.logger = {
   // 忽略 request/reponse 日志的路由, 用于过滤存活检测/静态资源等路由， 支持字符和正则
   ingore: ['/', /.+\.{html|css|js}/],
 
+  //以下两个参数必须至少有一个为 true
+  //是否输入扁平化JSON的日志, 默认不输出
+  flattenr: false,
+  //是否序列化输出，默认输出
+  stringify: true,
+
   event: {
     // 是否输出 request/reponse/error 事件日志
     request: true,
@@ -115,7 +121,7 @@ this.logger.info('massage', {obj: 123}, [{arroy: 123}])
     from: 'controller.home',
     log1: 'massage',
 
-    //string化的 和 扁平化的对象形式都有
+    //string化的 和 扁平化的对象形式
     log2: { obj: 123 },
     'log2.obj': 123,
 

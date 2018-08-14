@@ -1,39 +1,35 @@
 'use strict';
 
-const {getErrorJson} = require('../../lib/util')
+const uuid = require('uuid/v4')
+const META = Symbol('meta')
 
 module.exports = {
 
+  get meta() {
+    return {
+      reqid: uuid(),
+      uid: this.userId || this.uid || '',
+      use: this.starttime ? Date.now() - this.starttime : 0,
+      origin: this.origin,
+      ip: this.ip,
+      host: this.host,
+      method: this.method,
+      path: this.path,
+      url: this.url,
+      body: this.request.body,
+      query: this.query,
+      params: this.params
+    }
+  },
+
   get jsonLogger() {
-
-    let meta = {
-      reqid: this.requestId || '',
-      uid: this.userId || '',
-      use: this.starttime ? Date.now() - this.starttime : 0
-    };
-
     let logger = {};
-
     ['info', 'debug', 'warn', 'error'].forEach(level => {
       logger[level] = (...args) => {
-        //加入meta
-        args.push(meta)
-
-        for (let i = 0, len = args.length; i < len; i++) {
-
-          if (args[i] instanceof Error) {
-            args[i] = {
-              error: getErrorJson(args[i])
-            }
-          }
-
-          args[i] = typeof args[i] === 'string' ? args[i] : JSON.stringify(args[i])
-        }
-
+        args.push(this.meta)
         this.app.logger[level](...args)
       }
     });
-
     return logger;
   },
 };
