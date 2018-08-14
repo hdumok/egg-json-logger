@@ -36,7 +36,8 @@ exports.logger = {
 ```
 
 ```
-//由于暂时无法 在插件扩展的 extend.js 里覆盖egg 内置extend的属性(logger), 只能具体服务里的extend.js里覆盖
+//由于暂时无法 在插件扩展的 extend.js 里覆盖egg内置extend的属性(logger),
+//只能具体服务里的extend.js里覆盖
 // {app_root}/app/extend/context.js
 module.exports = {
   get logger() {
@@ -49,13 +50,21 @@ module.exports = {
  }
  ```
 
+### controller/service
+    this.logger.info('日志的关键字', '日志的内容1', '日志的内容2'...)
+### middleware/model
+    app.logger.info('[middlewave.中间件文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
+    app.logger.info('[model.模型文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
+## app.js
+    app.logger.info('[任何from]', '日志的关键字', '日志的内容1', '日志的内容2'...)
 ## Configuration
 
 ```js
 // {app_root}/config/config.default.js
 exports.logger = {
 
-  // 忽略 request/reponse 日志的路由, 用于过滤存活检测/静态资源等路由
+  // 在 已有的 logger 扩展配置参数，以下是默认的扩展参数
+  // 忽略 request/reponse 日志的路由, 用于过滤存活检测/静态资源等路由， 支持字符和正则
   ingore: ['/', /.+\.{html|css|js}/],
 
   event: {
@@ -67,14 +76,6 @@ exports.logger = {
 };
 ```
 
-## Use
-### controller/service
-    this.logger.info('日志的关键字', '日志的内容1', '日志的内容2'...)
-### middleware/model
-    app.logger.info('[middlewave.中间件文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
-    app.logger.info('[model.模型文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
-## app.js
-    app.logger.info('[任何from]', '日志的关键字', '日志的内容1', '日志的内容2'...)
 
 ## Description
 * 基于egg内置的logger, 二次封装，JSON化输出logger
