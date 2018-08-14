@@ -1,19 +1,10 @@
 # egg-json-logger
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![David deps][david-image]][david-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/egg-json-logger.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-json-logger
-[travis-image]: https://img.shields.io/travis/eggjs/egg-json-logger.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-json-logger
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-json-logger.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-json-logger?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-json-logger.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-json-logger
 [download-image]: https://img.shields.io/npm/dm/egg-json-logger.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-json-logger
 
@@ -55,7 +46,7 @@ module.exports = {
 ### middleware/model
     app.logger.info('[middlewave.中间件文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
     app.logger.info('[model.模型文件名称]', '日志的关键字', '日志的内容1', '日志的内容2'...)
-## app.js
+### app.js
     app.logger.info('[任何from]', '日志的关键字', '日志的内容1', '日志的内容2'...)
 ## Configuration
 
