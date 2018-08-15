@@ -1,25 +1,25 @@
 'use strict';
 
 const uuid = require('uuid/v4')
-const META = Symbol('meta')
+const REQID = Symbol('reqid')
 
 module.exports = {
 
   get meta() {
+    this[REQID] = this[REQID] || uuid()
     return {
-      reqid: uuid(),
-      uid: this.userId || this.uid || '',
-      use: this.starttime ? Date.now() - this.starttime : 0,
-      origin: this.origin,
-      ip: this.ip,
-      host: this.host,
-      method: this.method,
-      path: this.path,
-      url: this.url,
-      body: this.request.body,
-      query: this.query,
-      params: this.params
+      reqid: this[REQID],
+      uid: this.uid || this.userId || '',
+      use: this.starttime ? Date.now() - this.starttime : 0
     }
+  },
+
+  get logger() {
+    return this.jsonLogger
+  },
+
+  get coreLogger() {
+    return this.jsonLogger
   },
 
   get jsonLogger() {

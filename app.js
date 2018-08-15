@@ -5,7 +5,8 @@ const util = require('./lib/util')
 module.exports = app => {
 
   ['error', 'warn', 'info', 'debug'].forEach(level => {
-    app.logger['_' + level] = app.logger[level];
+    const LEVEL = Symbol(level)
+    app.logger[LEVEL] = app.logger[level];
     app.logger[level] = function (...args) {
       //格式化参数
       for (let i = 0, len = args.length; i < len; i++) {
@@ -19,7 +20,7 @@ module.exports = app => {
         //对象序列化
         args[i] = typeof args[i] === 'string' ? args[i] : JSON.stringify(args[i])
       }
-      app.logger['_' + level](...args)
+      app.logger[LEVEL](...args)
     };
   });
 
@@ -30,25 +31,67 @@ module.exports = app => {
   util.stringify = !!config.stringify
 
   if (config.event.error) {
+
     app.on('error', (err, ctx) => {
-      let meta = ctx && ctx.meta
+      let meta = ctx && ctx.meta || {}
+
+      Object.assign({}, meta, {
+        origin: ctx.origin,
+        ip: ctx.ip,
+        host: ctx.host,
+        method: ctx.method,
+        path: ctx.path,
+        url: ctx.url,
+        body: ctx.request.body,
+        query: ctx.query,
+        params: ctx.params
+      })
+
       app.logger.error('[error]', meta, err)
     });
   }
 
   if (config.event.request) {
+
     app.on('request', ctx => {
-      if (util.checkIgnorePath(config.ingore)) return;
-      app.logger.info('[request]', ctx.meta)
+
+      if (util.checkIgnorePath(config.ingore)) return
+
+      let meta = Object.assign({
+        origin: ctx.origin,
+        ip: ctx.ip,
+        host: ctx.host,
+        method: ctx.method,
+        path: ctx.path,
+        url: ctx.url,
+        body: ctx.request.body,
+        query: ctx.query,
+      }, ctx.meta)
+
+      app.logger.info('[request]', meta)
     });
   }
 
   if (config.event.response) {
+
     app.on('response', ctx => {
+
       if (util.checkIgnorePath(config.ingore)) return;
 
-      let meta = ctx.meta;
+      let meta = Object.assign({
+        origin: ctx.origin,
+        ip: ctx.ip,
+        host: ctx.host,
+        method: ctx.method,
+        path: ctx.path,
+        url: ctx.url,
+        body: ctx.request.body,
+        query: ctx.query,
+        params: ctx.params
+      }, ctx.meta)
+
       meta.response = ctx.body
+
       switch (typeof meta.response) {
         case 'string':
           if (meta.response.indexOf('DOCTYPE') !== -1) {
