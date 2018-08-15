@@ -55,7 +55,7 @@ module.exports = app => {
 
     app.on('request', ctx => {
 
-      if (util.checkIgnorePath(config.ingore)) return
+      if (util.checkIgnorePath(config.ingore, ctx.path)) return
 
       let meta = Object.assign({
         origin: ctx.origin,
@@ -76,7 +76,7 @@ module.exports = app => {
 
     app.on('response', ctx => {
 
-      if (util.checkIgnorePath(config.ingore)) return;
+      if (util.checkIgnorePath(config.ingore, ctx.path)) return;
 
       let meta = Object.assign({
         origin: ctx.origin,
