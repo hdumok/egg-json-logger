@@ -1,6 +1,6 @@
 {
   "name": "egg-json-logger",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "JSON 化输出logger, 使用 阿里云日志服务 => LogStore => 采集日志 => 文本格式日志 => JSON模式",
   "eggPlugin": {
     "name": "logger"
